@@ -76,8 +76,10 @@ var SnakeView = Backbone.View.extend({
       _.each(self.scores, function(score, index) {
         score.rank = index+1;
         score.username = score.attributes.username;
+        if (score.username.length > 19) {
+          score.username = score.username.substring(0, 16) + '...';
+        }
         score.score = score.attributes.score;
-        debugger;
         highscores += $.Mustache.render('score', score);
       });
       $("#daScores").html(highscores);
