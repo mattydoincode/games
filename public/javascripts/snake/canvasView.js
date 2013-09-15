@@ -5,7 +5,6 @@ var CanvasView = Backbone.View.extend({
 
     // The DOM events specific to an item.
     events: {
-
     },
 
     // The TodoView listens for changes to its model, re-rendering. Since there's
@@ -20,7 +19,7 @@ var CanvasView = Backbone.View.extend({
       var height = w.innerHeight();
       var width = w.innerWidth();
       self.setUpDimensions(width,height);
-      self.snake = new SnakeView({context: self.context, width: width, height: height});
+      self.snake = new SnakeView({context: self.context, width: width, height: height, el: $('.snake-wrapper')});
     },
 
     // Re-render the titles of the todo item.

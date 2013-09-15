@@ -5,7 +5,7 @@ var SnakeView = Backbone.View.extend({
 
     // The DOM events specific to an item.
     events: {
-
+      "change #light": "changeColor"
     },
 
     settings: {
@@ -31,6 +31,7 @@ var SnakeView = Backbone.View.extend({
       self.context = self.options.context;
       self.width = self.options.width;
       self.height = self.options.height;
+      self.light = true;
       self.settings.gridY = Math.round(self.settings.gridX * (self.height / self.width));
       self.boxHeight = self.height / self.settings.gridY;
       self.boxWidth = self.width / self.settings.gridX;
@@ -52,6 +53,17 @@ var SnakeView = Backbone.View.extend({
       */
       self.waiting = true;
       self.render();
+    },
+
+    changeColor: function() {
+      var self = this;
+      self.light = !self.light;
+
+      if (self.light) {
+        $('.canvasContainer').css('background', 'white');
+      } else {
+        $('.canvasContainer').css('background', 'black');
+      }
     },
 
     incrementTracking: function() {
@@ -198,7 +210,7 @@ var SnakeView = Backbone.View.extend({
     writeText: function () {
       var self = this;
       self.context.font="30px Arial";
-      self.context.fillStyle = "Black";
+      self.context.fillStyle = self.light ? "Black" : "White";
       self.context.fillText("press space to begin",self.height /5,self.height/2 - 15);
     },
 

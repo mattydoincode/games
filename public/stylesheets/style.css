@@ -7,6 +7,19 @@
   overflow: visible;
 }
 
+.snake-wrapper {
+	position: fixed;
+	right: 250px;
+	top: 20px;
+	padding: 0px; 
+}
+
+.switch {
+	position: fixed;
+	right: 50px;
+	bottom: 40px;
+}
+
 .highscore {
  	background: #ECF0F1;
  	padding: 10px;
