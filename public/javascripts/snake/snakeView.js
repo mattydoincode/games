@@ -16,7 +16,7 @@ var SnakeView = Backbone.View.extend({
       restSnakeColor: "#004FFF",
       spotColor: "red",
       rate: 80,
-      maxInputs: 2,
+      maxInputs: 4,
       startDirection: 2, // right,
       valueOfEating: 4
     },
