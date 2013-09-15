@@ -88,9 +88,16 @@ var SnakeView = Backbone.View.extend({
     startGame: function () {
       var self = this;
       self.snakeQueue = [];
-      self.snakeQueue.push({x: 10, y: 3});
+      self.snakeQueue.push({x: 6, y: 5});
+      self.snakeQueue.push({x: 7, y: 5});
+      self.snakeQueue.push({x: 7, y: 4});
+      self.snakeQueue.push({x: 7, y: 3});
+      self.snakeQueue.push({x: 6, y: 3});
+      self.snakeQueue.push({x: 5, y: 3});
+      self.snakeQueue.push({x: 4, y: 3});
+      self.spot = {x: 3, y: 5};
       self.spotPlaced = false;
-      self.placeRandomSpot();
+      //self.placeRandomSpot();
       self.inputQueue = [];
       self.extras = 0;
       self.score = 0;
@@ -120,7 +127,7 @@ var SnakeView = Backbone.View.extend({
         //optional
         //self.renderGrid();
         self.checkInputs();
-        self.moveSnake();
+        //self.moveSnake();
         self.renderSnake();
       }
 
@@ -129,7 +136,7 @@ var SnakeView = Backbone.View.extend({
 
     addScore: function() {
       var self = this;
-
+setTime
       var username = $('#username').val();
       var score = parseInt($('#newscore').html());
 
