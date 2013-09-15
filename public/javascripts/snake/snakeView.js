@@ -35,6 +35,7 @@ var SnakeView = Backbone.View.extend({
       self.boxHeight = self.height / self.settings.gridY;
       self.boxWidth = self.width / self.settings.gridX;
       
+      self.incrementTracking();
       self.readScores();
 
       $(window).keydown(function (e) {
@@ -51,6 +52,19 @@ var SnakeView = Backbone.View.extend({
       */
       self.waiting = true;
       self.render();
+    },
+
+    incrementTracking: function() {
+      var Tracking = Parse.Object.extend("Tracking");
+      var query = new Parse.Query(Tracking);
+      query.get("JBkMU5Uhqm", {
+        success: function(tracking) {
+          tracking.increment("views");
+          tracking.save();
+        },
+        error: function(object, error) {
+        }
+      });
     },
 
     readScores: function() {
