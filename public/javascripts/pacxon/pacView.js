@@ -341,6 +341,15 @@ var PacView = Backbone.View.extend({
       }
       var last = self.snakeQueue[self.snakeQueue.length-1];
       self.snakeQueue = [];
+      self.fillSpace();
+    },
+
+    fillSpace: function () {
+
+      
+
+
+      
     },
 
     renderGrid: function () {
