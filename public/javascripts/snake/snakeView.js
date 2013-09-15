@@ -122,6 +122,7 @@ var SnakeView = Backbone.View.extend({
         self.checkInputs();
         self.moveSnake();
         self.renderSnake();
+        self.writeScore();
       }
 
       setTimeout(function (){ self.render(); }, self.settings.rate);
@@ -185,6 +186,13 @@ var SnakeView = Backbone.View.extend({
       self.context.font="30px Arial";
       self.context.fillStyle = "Black";
       self.context.fillText("press space to begin",self.height /5,self.height/2 - 15);
+    },
+
+    writeScore: function() {
+      var self = this;
+      self.context.font="30px Arial";
+      self.context.fillStyle = "Black";
+      self.context.fillText(self.score, 10, 40);
     },
 
     placeRandomSpot: function () {
