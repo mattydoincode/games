@@ -335,13 +335,12 @@ var PacView = Backbone.View.extend({
 
     registerPath: function () {
       var self = this;
-      for(var i = 0; i < self.snakeQueue.length-1; i++){
+      for(var i = 0; i < self.snakeQueue.length; i++){
         var spot = self.snakeQueue[i];
         self.gameGrid[spot.x][spot.y] = {status: "cleared"};
       }
       var last = self.snakeQueue[self.snakeQueue.length-1];
       self.snakeQueue = [];
-      self.snakeQueue.push(last);
     },
 
     renderGrid: function () {
