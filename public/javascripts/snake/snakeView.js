@@ -18,10 +18,9 @@ var SnakeView = Backbone.View.extend({
       rate: 80,
       maxInputs: 4,
       startDirection: 2, // right,
-      valueOfEating: 4
+      valueOfEating: 4,
+      numScores: 5
     },
-
-
 
     // The TodoView listens for changes to its model, re-rendering. Since there's
     // a one-to-one correspondence between a **Todo** and a **TodoView** in this
@@ -36,6 +35,8 @@ var SnakeView = Backbone.View.extend({
       self.boxHeight = self.height / self.settings.gridY;
       self.boxWidth = self.width / self.settings.gridX;
       
+      self.readScores();
+
       $(window).keydown(function (e) {
         self.registerInput(e.which);
       });
@@ -52,6 +53,36 @@ var SnakeView = Backbone.View.extend({
       self.render();
     },
 
+    readScores: function() {
+      var self = this;
+      var HighScore = Parse.Object.extend("HighScore");
+      var query = new Parse.Query(HighScore);
+      query.limit(self.settings.numScores);
+      query.descending("score");
+      query.find({
+        success: function(results) {
+          self.scores = results;
+          self.displayScores();
+        },
+        error: function(error) {
+          alert("Error: " + error.code + " " + error.message);
+        }
+      });
+    },
+
+    displayScores: function() {
+      var self = this;
+      var highscores = '';
+      _.each(self.scores, function(score, index) {
+        score.rank = index+1;
+        score.username = score.attributes.username;
+        score.score = score.attributes.score;
+        debugger;
+        highscores += $.Mustache.render('score', score);
+      });
+      $("#daScores").html(highscores);
+    },
+
     startGame: function () {
       var self = this;
       self.snakeQueue = [];
@@ -60,6 +91,7 @@ var SnakeView = Backbone.View.extend({
       self.placeRandomSpot();
       self.inputQueue = [];
       self.extras = 0;
+      self.score = 0;
       //key inputs
       self.inputs = [];
       // 0 = not pressed, 1 = pressed, 2 = held?
@@ -70,7 +102,7 @@ var SnakeView = Backbone.View.extend({
 
       self.direction = self.settings.startDirection;
 
-
+      $('.container-fluid').hide();
 
     },
 
@@ -79,19 +111,71 @@ var SnakeView = Backbone.View.extend({
       var self = this;
       self.clearCanvas();
 
-      if(self.waiting){
+      if(self.waiting) {
         self.writeText();
       }
       else {
         //optional
         //self.renderGrid();
-        
         self.checkInputs();
         self.moveSnake();
         self.renderSnake();
       }
 
       setTimeout(function (){ self.render(); }, self.settings.rate);
+    },
+
+    addScore: function() {
+      var self = this;
+
+      var username = $('#username').val();
+      var score = parseInt($('#newscore').html());
+
+      if (username == '' || score == 0) {
+        return;
+      }
+
+      var HighScore = Parse.Object.extend("HighScore");
+      var newScore = new HighScore();
+
+      newScore.set("score", score);
+      newScore.set("username", username);
+       
+      newScore.save(null, {
+        success: function(gameScore) {
+          // alert('saved!');
+          // if it was a high score, refresh them
+          self.readScores();
+        },
+        error: function(gameScore, error) {
+          // Execute any logic that should take place if the save fails.
+          // error is a Parse.Error with an error code and description.
+          alert('Failed to create new object, with error code: ' + error.description);
+        }
+      });
+
+      $('#newscore').html('');
+      $('.newscore-row').hide();
+      $('.lastscore-row').show();
+    },
+
+    gameOver: function() {
+      var self = this;
+
+      // fill in the new score
+      $('#lastscore').html(self.score);
+      $('#newscore').html(self.score);
+
+      if (self.score > self.scores[self.scores.length-1].score) {
+        $('.newscore-row').show();
+        $('.lastscore-row').hide();
+      } else {
+        $('.lastscore-row').show();
+      }
+
+      // show scores
+      $('.container-fluid').fadeIn('slow');
+
     },
 
     writeText: function () {
@@ -130,7 +214,7 @@ var SnakeView = Backbone.View.extend({
       */
 
       if(key== 32){
-        if(self.waiting){
+        if(self.waiting && !$('#username').is(':focus')){
           self.startGame();
           self.waiting = false;
         }
@@ -154,6 +238,11 @@ var SnakeView = Backbone.View.extend({
       else if(key==40){
         if(self.down==0){
           self.down=1;
+        }
+      }
+      else if(key == 13){
+        if (self.waiting) {
+          self.addScore();
         }
       }
 
@@ -226,6 +315,8 @@ var SnakeView = Backbone.View.extend({
       }
 
       if(newSpot.x==self.spot.x && newSpot.y==self.spot.y){
+        // got food
+        self.score += 10;
         self.extras+= self.settings.valueOfEating;
         self.placeRandomSpot();
       }
@@ -245,10 +336,11 @@ var SnakeView = Backbone.View.extend({
         startOver = true;
       }
       self.snakeQueue.push(newSpot);
-      if(startOver){
+      
+      if(startOver) {
         self.waiting = true;
+        self.gameOver();
       }
-
 
     },
 
@@ -256,7 +348,6 @@ var SnakeView = Backbone.View.extend({
       var self = this;
       self.context.strokeStyle = "#ddd";
 
-    
       for(var i = 0; i < self.settings.gridX; i++) {
         for(var j = 0; j < self.settings.gridY; j++) {
           //x, y, w, h

@@ -1,33 +1,63 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>{{ title }}</title>
-    <link rel='stylesheet' href='/stylesheets/bootstrap.css' />
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-    
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.css">
+
+    <link rel="stylesheet" href="/stylesheets/flat-ui.css">
+    <link rel="stylesheet" href="/stylesheets/style.css">
   </head>
   <body>
-
-  	<div class="canvasContainer">
-  		<canvas id="canvas"></canvas>
-  	</div>
+    <div class="canvasContainer">
+      <canvas id="canvas"></canvas>
+    </div>
+    <div class="container-fluid">
+      <div class="row-fluid" style="padding-top:30px;">
+        <div class="well highscores">
+          <h3>High Scores</h3>
+          <div id="daScores">
+            <div id="loader">
+              <img src="stylesheets/ajax-loader.gif" alt=""></img>
+            </div>
+          </div>
+          <div class="row highscore-row lastscore-row">
+            <div class="highscore well">
+              <div class="username">Your Last Score</div>
+              <div class="score" id="lastscore"></div>
+            </div>
+          </div>
+          <div class="row highscore-row newscore-row">
+            <div class="highscore well">
+              <input type="text" id="username" placeholder="Enter name to save score"></input>
+              <div class="score" id="newscore">15</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
-  
-    <script type="text/javascript" src="/javascripts/framework/jquery-2.0.3.min.js"></script>
-    <script type="text/javascript" src="/javascripts/framework/underscore-min.js"></script>
-    <script src="/javascripts/framework/backbone-min.js"></script>
-    
-    <script type="text/javascript" src="/javascripts/framework/mustache.js"></script>
-    <script type="text/javascript" src="/javascripts/snake/canvasView.js"></script>
-    <script type="text/javascript" src="/javascripts/snake/snakeView.js"></script>
-
-
+  <script type="text/javascript" src="/javascripts/framework/jquery-2.0.3.min.js"></script>
+  <script type="text/javascript" src="/javascripts/framework/underscore-min.js"></script>
+  <script type="text/javascript" src="/javascripts/framework/backbone-min.js"></script>  
+  <script type="text/javascript" src="/javascripts/framework/mustache.js"></script>
+  <script type="text/javascript" src="/javascripts/framework/jquery.mustache.js"></script>
+  <script type="text/javascript" src="/javascripts/framework/parse-1.2.12.min.js"></script>
+  <script type="text/javascript" src="/javascripts/snake/canvasView.js"></script>
+  <script type="text/javascript" src="/javascripts/snake/snakeView.js"></script>
   <script type="text/javascript">
-  $(function () {
-
-    new CanvasView({el: $('.container')});
-
-  });
+    $(function () {
+      $.Mustache.addFromDom();
+      Parse.initialize("SEHipMlc4GV6rEPmxZK5OMwk9zkJGRBp6XWIapGD", "NhHEM0pmBzx3e5gYUgimgSfj49SLX3iB48TthPm1");
+      new CanvasView({el: $('.container')});
+    });
   </script>
-
+  <script id="score" type="text/html">
+      <div class="row highscore-row">
+        <div class="highscore well">
+          <div class="rank">{{rank}}.</div>
+          <div class="username">{{username}}</div>
+          <div class="score">{{score}}</div>
+        </div>
+      </div>
+  </script>
 </html>
