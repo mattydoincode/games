@@ -59,7 +59,6 @@ var PacView = Backbone.View.extend({
     startGame: function () {
       var self = this;
       self.snakeQueue = [];
-
       self.initializeGameGrid();
       self.snakeQueue.push({x: 0, y: 0});
       self.inputQueue = [];
@@ -346,10 +345,10 @@ var PacView = Backbone.View.extend({
 
     fillSpace: function () {
 
-      
 
 
-      
+
+
     },
 
     renderGrid: function () {

@@ -5,7 +5,7 @@ var CanvasView = Backbone.View.extend({
 
     // The DOM events specific to an item.
     events: {
-
+      
     },
 
     // The TodoView listens for changes to its model, re-rendering. Since there's
@@ -15,6 +15,7 @@ var CanvasView = Backbone.View.extend({
       var self = this;
       _.bindAll(self, 'setUpDimensions');
       self.canvas = document.getElementById("canvas");
+      $(self.canvas).css('background-color', "black");
       self.context = self.canvas.getContext("2d");
       var w = $(window);
       var height = w.innerHeight();
