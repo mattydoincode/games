@@ -7,6 +7,7 @@ var express = require('express');
 var routes = require('./routes');
 var pac = require('./routes/pacxon');
 var user = require('./routes/user');
+var snake = require('./routes/snake');
 var http = require('http');
 var path = require('path');
 
@@ -31,8 +32,11 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-app.get('/', routes.index);
+app.get('/', function (req, res) {
+	res.redirect("/snake");
+});
 app.get('/pacxon', pac.pacxon);
+app.get('/snake', snake.index);
 app.get('/users', user.list);
 
 http.createServer(app).listen(app.get('port'), function(){
