@@ -183,7 +183,22 @@ var SnakeView = Backbone.View.extend({
       var self = this;
       if(self.inputs.length > 0){
         //then we must move the snake in a different direction potentially
-        self.direction = self.inputs.shift();
+        var newDirection = self.inputs.shift();
+        if(newDirection == 0 && self.direction==2){
+
+        }
+        else if(newDirection == 1 && self.direction==3){
+
+        }
+        else if(newDirection == 2 && self.direction==0){
+
+        }
+        else if(newDirection == 3 && self.direction==1){
+          
+        }
+        else {
+          self.direction = newDirection;
+        }
       }
       var oldSpot = self.snakeQueue[self.snakeQueue.length-1];
       var newSpot = {
