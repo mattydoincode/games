@@ -1,12 +1,6 @@
 
-/**
- * Module dependencies.
- */
-
 var express = require('express');
-var routes = require('./routes');
 var pac = require('./routes/pacxon');
-var user = require('./routes/user');
 var snake = require('./routes/snake');
 var http = require('http');
 var path = require('path');
@@ -17,7 +11,7 @@ var app = express();
 app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'hjs');
-app.use(express.favicon());
+app.use(express.favicon(__dirname + "/public/images/favicon.ico")); 
 app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
@@ -37,7 +31,6 @@ app.get('/', function (req, res) {
 });
 app.get('/pacxon', pac.pacxon);
 app.get('/snake', snake.index);
-app.get('/users', user.list);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

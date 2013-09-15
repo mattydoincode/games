@@ -1,11 +1,24 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>{{title}}</title>
+    <title>Emdaq Games - {{title}}</title>
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.css">
 
     <link rel="stylesheet" href="/stylesheets/flat-ui.css">
     <link rel="stylesheet" href="/stylesheets/style.css">
+
+    <meta name="description" content="Fullscreen, classic, no-nonsense, snake arcade game. Built by Emdaq.">
+    <meta name="keywords" content="snake,snakegame,games">
+
+    <meta property="og:url" content="http://games.emdaq.com/snake">
+    <meta property="og:image" content="http://games.emdaq.com/images/facebookpic.png">
+    <meta property="og:description" content="Fullscreen, classic, no-nonsense, snake arcade game. Built by Emdaq.">
+    <meta property="og:title" content="Emdaq Games - Snake">
+    <meta property="og:site_name" content="Emdaq Games - Snake">
+
+    <meta itemprop="name" content="Emdaq Games - Snake">
+    <meta itemprop="description" content="Fullscreen, classic, no-nonsense, snake arcade game. Built by Emdaq.">
+
   </head>
   <body>
     <div class="canvasContainer">
