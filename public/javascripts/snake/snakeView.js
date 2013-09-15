@@ -136,7 +136,7 @@ var SnakeView = Backbone.View.extend({
 
     addScore: function() {
       var self = this;
-setTime
+
       var username = $('#username').val();
       var score = parseInt($('#newscore').html());
 
