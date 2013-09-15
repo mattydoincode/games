@@ -103,9 +103,16 @@ var SnakeView = Backbone.View.extend({
 
     placeRandomSpot: function () {
         var self = this;
-        var x = Math.floor((Math.random()*self.settings.gridX));
-        var y = Math.floor((Math.random()*self.settings.gridY));
-        self.spot = {x: x, y: y};
+        var found = false;
+        while(!found){
+          var self = this;
+          var x = Math.floor((Math.random()*self.settings.gridX));
+          var y = Math.floor((Math.random()*self.settings.gridY));
+          var found = !_.any(self.snakeQueue, function (spot){
+            return spot.x==x && spot.y==y;
+          });
+          self.spot = {x: x, y: y};
+        }
     },
 
     clearCanvas: function () {
