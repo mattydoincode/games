@@ -19,7 +19,9 @@ var SnakeView = Backbone.View.extend({
       maxInputs: 4,
       startDirection: 2, // right,
       valueOfEating: 4,
-      numScores: 5
+      numScores: 5,
+      darkColor: '#2C3E50',
+      lightColor: '#ffffff'
     },
 
     // The TodoView listens for changes to its model, re-rendering. Since there's
@@ -60,9 +62,9 @@ var SnakeView = Backbone.View.extend({
       self.light = !self.light;
 
       if (self.light) {
-        $('.canvasContainer').css('background', 'white');
+        $('.canvasContainer').css('background', self.settings.lightColor);
       } else {
-        $('.canvasContainer').css('background', 'black');
+        $('.canvasContainer').css('background', self.settings.darkColor);
       }
     },
 
@@ -210,14 +212,14 @@ var SnakeView = Backbone.View.extend({
     writeText: function () {
       var self = this;
       self.context.font="30px Arial";
-      self.context.fillStyle = self.light ? "Black" : "White";
+      self.context.fillStyle = self.light ? self.settings.darkColor : self.settings.lightColor;
       self.context.fillText("press space to begin",self.height /5,self.height/2 - 15);
     },
 
     writeScore: function() {
       var self = this;
       self.context.font="30px Arial";
-      self.context.fillStyle = "Black";
+      self.context.fillStyle = self.light ? self.settings.darkColor : self.settings.lightColor;
       self.context.fillText(self.score, 10, 40);
     },
 
