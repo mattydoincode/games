@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ title }}</title>
+    <link rel='stylesheet' href='/stylesheets/bootstrap.css' />
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    
+  </head>
+  <body>
+
+  	<div class="canvasContainer">
+  		<canvas id="canvas"></canvas>
+  	</div>
+  </body>
+  
+    <script type="text/javascript" src="/javascripts/framework/jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" src="/javascripts/framework/underscore-min.js"></script>
+    <script src="/javascripts/framework/backbone-min.js"></script>
+    
+    <script type="text/javascript" src="/javascripts/framework/mustache.js"></script>
+    <script type="text/javascript" src="/javascripts/pacxon/canvasView.js"></script>
+    <script type="text/javascript" src="/javascripts/pacxon/pacView.js"></script>
+
+
+  <script type="text/javascript">
+  $(function () {
+
+    new CanvasView({el: $('.container')});
+
+  });
+  </script>
+
+</html>
