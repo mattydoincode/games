@@ -56,6 +56,7 @@ exports.updateSavingKey = function(req, res) {
 	var requestedWith = req.get('X-Requested-With');
 	var username = req.get('X-Here-We-Go');
 	var score = parseInt(req.get('X-Lets-Do-It'));
+	var currentG = req.param('q');
 
 	// validation
 	if (!req.session[tmpKey] || req.session[tmpKey] == '') {
@@ -66,7 +67,7 @@ exports.updateSavingKey = function(req, res) {
 		res.send(400, "there once was a man named bob.");
 		return;
 	}
-	if (!req.session.game) {
+	if (!req.session.game || !req.session.game[currentG]) {
 		res.send(400, "let's go to the mall!");
 		return;
 	}
@@ -74,8 +75,8 @@ exports.updateSavingKey = function(req, res) {
 	// validate game length
 	var gameStart = req.session[tmpKey].timestamp;
 	var gameEnd = new Date().getTime();
-	var maxFeasibleScore = maxGameScorePerSecond[req.session.game]*((gameEnd - gameStart)/1000);
-	if (score > maxFeasibleScore || score > maxGameScores[req.session.game]) {
+	var maxFeasibleScore = maxGameScorePerSecond[currentG]*((gameEnd - gameStart)/1000);
+	if (score > maxFeasibleScore || score > maxGameScores[currentG]) {
 		res.send(400, "well aren't you speedy");
 		return;	
 	}
@@ -131,7 +132,7 @@ exports.saveHighScore = function(req, res) {
 		res.send(400, 'are you trying to get your IP blocked?');
 		return;
 	}
-	if (req.session.game != game) {
+	if (!req.session.game || !req.session.game[game]) {
 		res.send(400, "but bob was often lonely :(");
 		return;
 	}

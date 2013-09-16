@@ -229,7 +229,7 @@ var SnakeView = Backbone.View.extend({
       $.ajax({
         type: 'PUT',
         url: '/highscores',
-        data: { k: self.tmpKey },
+        data: { k: self.tmpKey, q: 'snake' },
         headers: { 'X-Here-We-Go': username, 'X-Lets-Do-It': score },
         success: function (savingKey) {
           var x = crypto.hex_md5(self.c + savingKey);
