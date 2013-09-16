@@ -38,7 +38,7 @@ var SnakeView = Backbone.View.extend({
       self.boxHeight = self.height / self.settings.gridY;
       self.boxWidth = self.width / self.settings.gridX;
       
-      self.incrementTracking();
+      self.incrementView();
       self.readScores();
 
       $(window).keydown(function (e) {
@@ -68,17 +68,44 @@ var SnakeView = Backbone.View.extend({
       }
     },
 
-    incrementTracking: function() {
-      var Tracking = Parse.Object.extend("Tracking");
-      var query = new Parse.Query(Tracking);
-      query.get("JBkMU5Uhqm", {
-        success: function(tracking) {
-          tracking.increment("views");
-          tracking.save();
-        },
-        error: function(object, error) {
-        }
-      });
+    incrementView: function() {
+      if (self.tracking) {
+        tracking.increment("views");
+        tracking.save();
+      } else {
+        var Tracking = Parse.Object.extend("Tracking");
+        var query = new Parse.Query(Tracking);
+        query.get("JBkMU5Uhqm", {
+          success: function(tracking) {
+            self.tracking = tracking;
+            tracking.increment("views");
+            tracking.save();
+          },
+          error: function(object, error) {
+            self.tracking = null;
+          }
+        });
+      }
+    },
+
+    incrementGame: function() {
+      if (self.tracking) {
+        tracking.increment("games");
+        tracking.save();
+      } else {
+        var Tracking = Parse.Object.extend("Tracking");
+        var query = new Parse.Query(Tracking);
+        query.get("JBkMU5Uhqm", {
+          success: function(tracking) {
+            self.tracking = tracking;
+            tracking.increment("games");
+            tracking.save();
+          },
+          error: function(object, error) {
+            self.tracking = null;
+          }
+        });
+      }
     },
 
     readScores: function() {
@@ -129,6 +156,7 @@ var SnakeView = Backbone.View.extend({
       self.down = 0;
       self.left = 0;
       self.right = 0;
+      self.incrementGame();
 
       self.direction = self.settings.startDirection;
 
