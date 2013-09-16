@@ -349,7 +349,7 @@ var SnakeView = Backbone.View.extend({
       }
       //2 = right
       if(self.right==1){
-        self.right=0
+        self.right=0;
         self.inputs.push(2);
       }
       //3 = down
@@ -459,7 +459,7 @@ var SnakeView = Backbone.View.extend({
       self.context.fillStyle = self.settings.spotColor;
       self.context.fillRect(self.spot.x * self.boxWidth, self.spot.y * self.boxHeight, self.boxWidth, self.boxHeight);
 
-    },
+    }
 
 
   });
