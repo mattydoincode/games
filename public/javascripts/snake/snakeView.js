@@ -33,8 +33,9 @@ var SnakeView = Backbone.View.extend({
       self.context = self.options.context;
       self.setUpDimensions(self.options.width, self.options.height);
       self.light = true;
+      self.isDev = self.options.isDev == 'true';
       
-      self.incrementView();
+      self.incrementViews();
       self.readScores();
 
       $(window).keydown(function (e) {
@@ -75,10 +76,14 @@ var SnakeView = Backbone.View.extend({
       }
     },
 
-    incrementView: function() {
+    incrementViews: function() {
+      var self = this;
+      if (self.isDev) {
+        return;
+      }
       if (self.tracking) {
-        tracking.increment("views");
-        tracking.save();
+        self.tracking.increment("views");
+        self.tracking.save();
       } else {
         var Tracking = Parse.Object.extend("Tracking");
         var query = new Parse.Query(Tracking);
@@ -95,17 +100,21 @@ var SnakeView = Backbone.View.extend({
       }
     },
 
-    incrementGame: function() {
+    incrementPlays: function() {
+      var self = this;
+      if (self.isDev) {
+        return;
+      }
       if (self.tracking) {
-        tracking.increment("games");
-        tracking.save();
+        self.tracking.increment("plays");
+        self.tracking.save();
       } else {
         var Tracking = Parse.Object.extend("Tracking");
         var query = new Parse.Query(Tracking);
         query.get("JBkMU5Uhqm", {
           success: function(tracking) {
             self.tracking = tracking;
-            tracking.increment("games");
+            tracking.increment("plays");
             tracking.save();
           },
           error: function(object, error) {
@@ -121,6 +130,7 @@ var SnakeView = Backbone.View.extend({
       var query = new Parse.Query(HighScore);
       query.limit(self.settings.numScores);
       query.descending("score");
+      query.equalTo("game", "snake");
       query.find({
         success: function(results) {
           self.scores = results;
@@ -163,7 +173,7 @@ var SnakeView = Backbone.View.extend({
       self.down = 0;
       self.left = 0;
       self.right = 0;
-      self.incrementGame();
+      self.incrementPlays();
 
       self.direction = self.settings.startDirection;
 
@@ -206,7 +216,8 @@ var SnakeView = Backbone.View.extend({
 
       newScore.set("score", score);
       newScore.set("username", username);
-       
+      newScore.set("game", "snake");
+
       newScore.save(null, {
         success: function(gameScore) {
           // alert('saved!');

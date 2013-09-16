@@ -13,10 +13,10 @@
     <meta property="og:url" content="http://games.emdaq.com/snake">
     <meta property="og:image" content="http://games.emdaq.com/images/facebookpic.png">
     <meta property="og:description" content="Fullscreen, classic, no-nonsense, snake arcade game. Built by Emdaq.">
-    <meta property="og:title" content="Emdaq Games - Snake">
-    <meta property="og:site_name" content="Emdaq Games - Snake">
+    <meta property="og:title" content="Emdaq Games - {{title}}">
+    <meta property="og:site_name" content="Emdaq Games - {{title}}">
 
-    <meta itemprop="name" content="Emdaq Games - Snake">
+    <meta itemprop="name" content="Emdaq Games - {{title}}">
     <meta itemprop="description" content="Fullscreen, classic, no-nonsense, snake arcade game. Built by Emdaq.">
 
   </head>
@@ -24,7 +24,7 @@
     <div class="canvasContainer">
       <canvas id="canvas"></canvas>
     </div>
-    <div class="container-fluid snake-wrapper">
+    <div class="container-fluid game-wrapper">
       <div class="switch" data-on-label="LITE" data-off-label="DRK">
         <input type="checkbox" id="light" checked="" />
       </div>
@@ -44,7 +44,7 @@
           </div>
           <div class="row highscore-row newscore-row">
             <div class="highscore well">
-              <input type="text" id="username" placeholder="Enter name to save score"></input>
+              <input type="text" id="username" placeholder="Enter name to save"></input>
               <div class="score" id="newscore">15</div>
             </div>
           </div>
@@ -65,7 +65,7 @@
     $(function () {
       $.Mustache.addFromDom();
       Parse.initialize("SEHipMlc4GV6rEPmxZK5OMwk9zkJGRBp6XWIapGD", "NhHEM0pmBzx3e5gYUgimgSfj49SLX3iB48TthPm1");
-      new CanvasView({el: $('.container')});
+      new CanvasView({el: $('.container'), isDev: '{{isDev}}' });
     });
   </script>
   <script>
