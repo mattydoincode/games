@@ -33,6 +33,10 @@ var SnakeView = Backbone.View.extend({
       self.context = self.options.context;
       self.setUpDimensions(self.options.width, self.options.height);
       self.light = true;
+      if(moment().hours()>20 || moment().hours() < 6){
+        $('#light').click();
+        self.changeColor();
+      }
       self.isDev = self.options.isDev == 'true';
       
       self.incrementViews();
