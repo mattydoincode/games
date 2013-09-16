@@ -216,7 +216,8 @@ var SnakeView = Backbone.View.extend({
 
       newScore.set("score", score);
       newScore.set("username", username);
-       
+      newScore.set("game", "snake");
+
       newScore.save(null, {
         success: function(gameScore) {
           // alert('saved!');

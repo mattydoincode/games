@@ -216,6 +216,7 @@ var FalldownView = Backbone.View.extend({
 
       newScore.set("score", score);
       newScore.set("username", username);
+      newScore.set("game", "falldown");
        
       newScore.save(null, {
         success: function(gameScore) {

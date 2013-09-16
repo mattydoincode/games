@@ -44,7 +44,7 @@
           </div>
           <div class="row highscore-row newscore-row">
             <div class="highscore well">
-              <input type="text" id="username" placeholder="Enter name to save score"></input>
+              <input type="text" id="username" placeholder="Enter name to save"></input>
               <div class="score" id="newscore">15</div>
             </div>
           </div>
