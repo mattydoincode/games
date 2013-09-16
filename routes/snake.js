@@ -1,4 +1,5 @@
 exports.index = function(req, res){
+  req.session.game = 'snake';
   res.render('snake', { 
   	title: 'Snake',
   	rank: '{{rank}}',

@@ -177,12 +177,20 @@ var SnakeView = Backbone.View.extend({
       self.down = 0;
       self.left = 0;
       self.right = 0;
-      self.incrementPlays();
-
       self.direction = self.settings.startDirection;
-
       $('.container-fluid').hide();
 
+      // TODO increment plays from node
+      self.incrementPlays();
+      self.c = Math.floor((Math.random()*1000)+1) + new Date().getTime();
+      $.ajax({
+        type: 'GET',
+        url: '/highscores',
+        data: { c: self.c },
+        success: function (tmpKey) {
+          self.tmpKey = tmpKey;
+        }
+      });
     },
 
     // Re-render the titles of the todo item.
@@ -218,30 +226,31 @@ var SnakeView = Backbone.View.extend({
         return;
       }
 
-      self.c = Math.floor((Math.random()*1000)+1); + new Date().getTime();
       $.ajax({
-        type: 'GET',
-        url: '/highscores?c=' + self.c,
+        type: 'PUT',
+        url: '/highscores',
+        data: { k: self.tmpKey },
+        headers: { 'X-Here-We-Go': username, 'X-Lets-Do-It': score },
         success: function (savingKey) {
-          var x =  hex_md5(self.c + savingKey);
+          var x = crypto.hex_md5(self.c + savingKey);
+          var l = crypto.hex_sha1(username + savingKey);
           var t = new Date().getTime();
-          var r = Math.floor((Math.random()*1000)+1);;
+          var r = Math.floor((Math.random()*1000)+1);
           var g = 'snake';
           var y = dcodeIO.bcrypt.genSaltSync();
-          var h = hex_sha1('' + t + score + username + r + g + x + y);
+          var h = crypto.hex_sha1('' + t + score + username + r + g + x + y);
 
           $.ajax({
             type: 'POST',
             url: '/highscores',
+            headers: { 'X-Try-Harder': l },
             data: {
               t: t,
               r: r,
               y: y,
               g: g,
-              u: username,
-              s: score,
               c: self.c,
-              bahaha: savingKey,
+              b: savingKey,
               h: h
             },
             success: function () {
