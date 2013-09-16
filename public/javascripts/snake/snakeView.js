@@ -218,23 +218,36 @@ var SnakeView = Backbone.View.extend({
         return;
       }
 
-      var HighScore = Parse.Object.extend("HighScore");
-      var newScore = new HighScore();
+      self.c = Math.floor((Math.random()*1000)+1); + new Date().getTime();
+      $.ajax({
+        type: 'GET',
+        url: '/highscores?c=' + self.c,
+        success: function (savingKey) {
+          var x =  hex_md5(self.c + savingKey);
+          var t = new Date().getTime();
+          var r = Math.floor((Math.random()*1000)+1);;
+          var g = 'snake';
+          var y = dcodeIO.bcrypt.genSaltSync();
+          var h = hex_sha1('' + t + score + username + r + g + x + y);
 
-      newScore.set("score", score);
-      newScore.set("username", username);
-      newScore.set("game", "snake");
-
-      newScore.save(null, {
-        success: function(gameScore) {
-          // alert('saved!');
-          // if it was a high score, refresh them
-          self.readScores();
-        },
-        error: function(gameScore, error) {
-          // Execute any logic that should take place if the save fails.
-          // error is a Parse.Error with an error code and description.
-          alert('Failed to create new object, with error code: ' + error.description);
+          $.ajax({
+            type: 'POST',
+            url: '/highscores',
+            data: {
+              t: t,
+              r: r,
+              y: y,
+              g: g,
+              u: username,
+              s: score,
+              c: self.c,
+              bahaha: savingKey,
+              h: h
+            },
+            success: function () {
+              self.readScores();
+            }
+          });
         }
       });
 

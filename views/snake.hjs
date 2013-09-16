@@ -59,6 +59,9 @@
   <script type="text/javascript" src="/javascripts/framework/mustache.js"></script>
   <script type="text/javascript" src="/javascripts/framework/jquery.mustache.js"></script>
   <script type="text/javascript" src="/javascripts/framework/parse-1.2.12.min.js"></script>
+  <script type="text/javascript" src="/javascripts/framework/md5.js"></script>
+  <script type="text/javascript" src="/javascripts/framework/sha1.js"></script>
+  <script type="text/javascript" src="/javascripts/framework/bcrypt.min.js"></script>
   <script type="text/javascript" src="/js/bootstrap-switch.js"></script>
   <script type="text/javascript" src="/javascripts/snake/canvasView.js"></script>
   <script type="text/javascript" src="/javascripts/snake/snakeView.js"></script>
