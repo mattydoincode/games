@@ -6,7 +6,7 @@ var pac = require('./routes/pacxon');
 var snake = require('./routes/snake');
 var cube = require('./routes/cube');
 var falldown = require('./routes/falldown');
-//var minify = require('express-minify');
+var highscores = require('./routes/highscores');
 var expressUglify = require('express-uglify');
 var http = require('http');
 var path = require('path');
@@ -36,13 +36,6 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-
-
-
-
-
-
-
 app.get('/', function (req, res) {
 	res.redirect("/snake");
 });
@@ -50,6 +43,8 @@ app.get('/pacxon', pac.pacxon);
 app.get('/snake', snake.index);
 app.get('/falldown', falldown.index);
 app.get('/cuberunner', cube.index);
+app.get('/highscores', highscores.getSavingKey);
+app.post('/highscores', highscores.saveHighScore);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

@@ -10,7 +10,7 @@
 .game-wrapper {
 	position: fixed;
 	right: 250px;
-	top: 20px;
+	top: 50px;
 	padding: 0px; 
 }
 
@@ -48,7 +48,6 @@
 	padding-bottom: 0px;
 	padding-top: 10px;
 	background: #1ABC9C;
-	width: 16%;
 	margin-left: 77%;
 	min-width: 220px;
 }

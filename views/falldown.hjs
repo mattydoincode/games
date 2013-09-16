@@ -28,7 +28,7 @@
       <div class="switch" data-on-label="LITE" data-off-label="DRK">
         <input type="checkbox" id="light" checked="" />
       </div>
-      <div class="row-fluid" style="padding-top:30px;">
+      <div class="row-fluid">
         <div class="well highscores">
           <h3>High Scores</h3>
           <div id="daScores">
@@ -58,6 +58,9 @@
   <script type="text/javascript" src="/javascripts/framework/mustache.js"></script>
   <script type="text/javascript" src="/javascripts/framework/jquery.mustache.js"></script>
   <script type="text/javascript" src="/javascripts/framework/parse-1.2.12.min.js"></script>
+  <script type="text/javascript" src="/javascripts/framework/md5.js"></script>
+  <script type="text/javascript" src="/javascripts/framework/sha1.js"></script>
+  <script type="text/javascript" src="/javascripts/framework/bcrypt.min.js"></script>
   <script type="text/javascript" src="/js/bootstrap-switch.js"></script>
   <script type="text/javascript" src="/javascripts/falldown/canvasView.js"></script>
   <script type="text/javascript" src="/javascripts/falldown/falldownView.js"></script>

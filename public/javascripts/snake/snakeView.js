@@ -473,10 +473,10 @@ var SnakeView = Backbone.View.extend({
           self.context.fillRect(spot.x * self.boxWidth, spot.y * self.boxHeight, self.boxWidth, self.boxHeight);
           self.context.fillStyle=self.settings.restSnakeColor;
         }
-        else{
+        else {
           self.context.fillRect(spot.x * self.boxWidth, spot.y * self.boxHeight, self.boxWidth, self.boxHeight);
         }
-      };
+      }
 
       self.context.fillStyle = self.settings.spotColor;
       self.context.fillRect(self.spot.x * self.boxWidth, self.spot.y * self.boxHeight, self.boxWidth, self.boxHeight);
