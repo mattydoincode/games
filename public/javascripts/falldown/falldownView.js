@@ -35,7 +35,7 @@ var FalldownView = Backbone.View.extend({
       self.light = true;
       self.isDev = self.options.isDev == 'true';
       
-      self.incrementView();
+      self.incrementViews();
       self.readScores();
 
       $(window).keydown(function (e) {
@@ -76,7 +76,7 @@ var FalldownView = Backbone.View.extend({
       }
     },
 
-    incrementView: function() {
+    incrementViews: function() {
       var self = this;
       if (self.isDev) {
         return;
@@ -100,13 +100,13 @@ var FalldownView = Backbone.View.extend({
       }
     },
 
-    incrementGame: function() {
+    incrementPlays: function() {
       var self = this;
       if (self.isDev) {
         return;
       }
       if (self.tracking) {
-        self.tracking.increment("games");
+        self.tracking.increment("plays");
         self.tracking.save();
       } else {
         var Tracking = Parse.Object.extend("Tracking");
@@ -114,7 +114,7 @@ var FalldownView = Backbone.View.extend({
         query.get("PvdidEXjic", {
           success: function(tracking) {
             self.tracking = tracking;
-            tracking.increment("games");
+            tracking.increment("plays");
             tracking.save();
           },
           error: function(object, error) {
@@ -173,7 +173,7 @@ var FalldownView = Backbone.View.extend({
       self.down = 0;
       self.left = 0;
       self.right = 0;
-      self.incrementGame();
+      self.incrementPlays();
 
       self.direction = self.settings.startDirection;
 
