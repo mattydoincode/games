@@ -9,6 +9,7 @@ process.env.PORT = process.env.PORT || 3000;
 // ****** DEPENDENCIES ******
 // **************************
 
+require('parse').Parse.initialize("SEHipMlc4GV6rEPmxZK5OMwk9zkJGRBp6XWIapGD", 'NhHEM0pmBzx3e5gYUgimgSfj49SLX3iB48TthPm1');
 var express = require('express');
 var pac = require('./routes/pacxon');
 var snake = require('./routes/snake');

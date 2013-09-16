@@ -58,8 +58,7 @@
   <script type="text/javascript" src="/javascripts/framework/mustache.min.js"></script>
   <script type="text/javascript" src="/javascripts/framework/jquery.mustache.min.js"></script>
   <script type="text/javascript" src="/javascripts/framework/parse-1.2.12.min.js"></script>
-  <script type="text/javascript" src="/javascripts/framework/crypto.min.js"></script>
-  <script type="text/javascript" src="/javascripts/framework/bcrypt.min.js"></script>
+  <script type="text/javascript" src="/javascripts/framework/jquery-ui.min.js"></script>
   <script type="text/javascript" src="/javascripts/framework/bootstrap-switch.js"></script>
   <script type="text/javascript" src="/javascripts/snake/canvasView.js"></script>
   <script type="text/javascript" src="/javascripts/snake/snakeView2.js"></script>
@@ -67,7 +66,7 @@
     $(function () {
       $.Mustache.addFromDom();
       Parse.initialize("SEHipMlc4GV6rEPmxZK5OMwk9zkJGRBp6XWIapGD", "NhHEM0pmBzx3e5gYUgimgSfj49SLX3iB48TthPm1");
-      new CanvasView({el: $('.container'), isDev: '{{isDev}}' });
+      new CanvasView({el: $('.container')});
     });
   </script>
   <script>

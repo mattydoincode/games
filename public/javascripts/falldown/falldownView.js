@@ -37,15 +37,12 @@ var FalldownView = Backbone.View.extend({
         $('#light').click();
         self.changeColor();
       }
-      self.isDev = self.options.isDev == 'true';
       
-      self.incrementViews();
       self.readScores();
 
       $(window).keydown(function (e) {
         self.registerInput(e.which);
       });
-
 
 
       //REFERENCE
@@ -77,54 +74,6 @@ var FalldownView = Backbone.View.extend({
         $('.canvasContainer').css('background', self.settings.lightColor);
       } else {
         $('.canvasContainer').css('background', self.settings.darkColor);
-      }
-    },
-
-    incrementViews: function() {
-      var self = this;
-      if (self.isDev) {
-        return;
-      }
-      if (self.tracking) {
-        tracking.increment("views");
-        tracking.save();
-      } else {
-        var Tracking = Parse.Object.extend("Tracking");
-        var query = new Parse.Query(Tracking);
-        query.get("PvdidEXjic", {
-          success: function(tracking) {
-            self.tracking = tracking;
-            tracking.increment("views");
-            tracking.save();
-          },
-          error: function(object, error) {
-            self.tracking = null;
-          }
-        });
-      }
-    },
-
-    incrementPlays: function() {
-      var self = this;
-      if (self.isDev) {
-        return;
-      }
-      if (self.tracking) {
-        self.tracking.increment("plays");
-        self.tracking.save();
-      } else {
-        var Tracking = Parse.Object.extend("Tracking");
-        var query = new Parse.Query(Tracking);
-        query.get("PvdidEXjic", {
-          success: function(tracking) {
-            self.tracking = tracking;
-            tracking.increment("plays");
-            tracking.save();
-          },
-          error: function(object, error) {
-            self.tracking = null;
-          }
-        });
       }
     },
 
@@ -180,13 +129,11 @@ var FalldownView = Backbone.View.extend({
       self.direction = self.settings.startDirection;
       $('.container-fluid').hide();
 
-      // TODO increment plays from node
-      self.incrementPlays();
       self.c = Math.floor((Math.random()*1000)+1) + new Date().getTime();
       $.ajax({
         type: 'GET',
         url: '/highscores',
-        data: { c: self.c },
+        data: { c: self.c, q: 'falldown' },
         success: function (tmpKey) {
           self.tmpKey = tmpKey;
         }
@@ -227,7 +174,7 @@ var FalldownView = Backbone.View.extend({
         type: 'PUT',
         url: '/highscores',
         data: { k: self.tmpKey },
-        headers: { 'X-Here-We-Go': username, 'X-Lets-Do-It': score },
+        headers: { 'X-Here-We-Go': username, 'X-Lets-Do-It': (self.c%2==0?score+7:score+9) },
         success: function (savingKey) {
           var x = crypto.hex_md5(self.c + savingKey);
           var l = crypto.hex_sha1(username + savingKey);

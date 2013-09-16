@@ -1,38 +1,56 @@
 var bcrypt = require('bcryptjs');
 var crypto = require('crypto');
-var Parse = require('parse').Parse;
+var parseHelper = require('../parseHelper');
 
 var privateKey = process.env.HIGH_SCORE || require('../keys').HIGH_SCORE;
 
-Parse.initialize("SEHipMlc4GV6rEPmxZK5OMwk9zkJGRBp6XWIapGD", 'NhHEM0pmBzx3e5gYUgimgSfj49SLX3iB48TthPm1');
-
-var maxGameScores = {
-	snake: 3750,
-	falldown: 1000,
-	cuberunner: 1000
+var gameSettings = {
+	snake: {
+		maxScore: 3750,
+		maxScorePerSecond: 30
+	},
+	falldown: {
+		maxScore: 3750,
+		maxScorePerSecond: 30
+	},
+	cuberunner: {
+		maxScore: 3750,
+		maxScorePerSecond: 30
+	}
 };
 
-var maxGameScorePerSecond = {
-	snake: 50,
-	falldown: 50,
-	cuberunner: 50
+function bail(req, res, message) {
+	// nuke session
+	for (prop in req.session) { 
+		if (req.session.hasOwnProperty(prop) && prop != 'cookie') { 
+			delete req.session[prop]; 
+		} 
+	}
+
+	// respond with 400
+	res.send(400, message);
 };
 
 exports.getSavingKey = function(req, res) {
 
 	// inputs
 	var clientKey = req.param('c');
+	var currentG = req.param('q');
 	var requestedWith = req.get('X-Requested-With');
 
 	// validation
 	if (!clientKey || clientKey == '') {
-		res.send(400, "you're miles away, keep trying.");
-		return;
+		return bail(req, res, "you're miles away, keep trying.");
+	}
+	if (!gameSettings[currentG] || !req.session.game[currentG]) {
+		return bail(req, res, "i'm singinggggg in the rain.");
 	}
 	if (requestedWith != 'XMLHttpRequest') {
-		res.send(400, "there once was a man named bob.");
-		return;
+		return bail(req, res, "there once was a man named bob.");
 	}
+
+	// record game start
+	parseHelper.recordPlay(currentG);
 
 	// security
 	var timestamp = new Date().getTime();
@@ -43,7 +61,8 @@ exports.getSavingKey = function(req, res) {
 	// save this in the session for later
 	req.session[tmpKey] = {
 		timestamp: timestamp,
-		clientKey: clientKey
+		clientKey: clientKey,
+		game: currentG
 	};
 
 	res.send(tmpKey);
@@ -55,30 +74,24 @@ exports.updateSavingKey = function(req, res) {
 	var tmpKey = req.param('k');
 	var requestedWith = req.get('X-Requested-With');
 	var username = req.get('X-Here-We-Go');
-	var score = parseInt(req.get('X-Lets-Do-It'));
-	var currentG = req.param('q');
+	var scorePlusSevenOrNine = parseInt(req.get('X-Lets-Do-It'));
 
 	// validation
-	if (!req.session[tmpKey] || req.session[tmpKey] == '') {
-		res.send(400, "you're miles away, keep trying.");
-		return;
+	if (!req.session[tmpKey]) {
+		return bail(req, res, "you're miles away, keep trying.");
 	}
 	if (requestedWith != 'XMLHttpRequest') {
-		res.send(400, "there once was a man named bob.");
-		return;
-	}
-	if (!req.session.game || !req.session.game[currentG]) {
-		res.send(400, "let's go to the mall!");
-		return;
+		return bail(req, res, "there once was a man named bob.");
 	}
 
-	// validate game length
+	// validate game score
 	var gameStart = req.session[tmpKey].timestamp;
 	var gameEnd = new Date().getTime();
-	var maxFeasibleScore = maxGameScorePerSecond[currentG]*((gameEnd - gameStart)/1000);
-	if (score > maxFeasibleScore || score > maxGameScores[currentG]) {
-		res.send(400, "well aren't you speedy");
-		return;	
+	var settings = gameSettings[req.session[tmpKey].game];
+	var maxFeasibleScore = settings.maxScorePerSecond*((gameEnd - gameStart)/1000);
+	var realScore = req.session[tmpKey].clientKey%2 == 0 ? scorePlusSevenOrNine - 7 : scorePlusSevenOrNine - 9;
+	if (realScore > maxFeasibleScore || realScore > settings.maxScore || realScore%10 != 0) {
+		return bail(req, res, "well aren't you speedy");
 	}
 
 	// security
@@ -91,11 +104,11 @@ exports.updateSavingKey = function(req, res) {
 		timestamp: gameEnd,
 		hash: hash,
 		username: username,
-		score: score
+		score: realScore
 	};
 
 	// clear out tmpKey
-	req.session[tmpKey] = null;
+	delete req.session[tmpKey];
 
 	res.send(hash);
 };
@@ -103,12 +116,11 @@ exports.updateSavingKey = function(req, res) {
 exports.saveHighScore = function(req, res) {
 	
 	// inputs
-	// TODO use public/private key and don't send all this data...
 	var clientKey = req.body.c;
 	var clientTime = req.body.t;
 	var clientRand = req.body.r;
 	var clientSalt = req.body.y;
-	var game = req.body.g;
+	var currentG = req.body.g;
 	var serverKey = req.body.b;
 	var hash = req.body.h;
 	var tryHarder = req.get('X-Try-Harder');
@@ -117,57 +129,34 @@ exports.saveHighScore = function(req, res) {
 
 	// validation
 	if (savingKey == null) {
-		res.redirect('http://tinyurl.com/congratsDoodYouDidIt');
-		return;
+		return bail(req, res, 'http://tinyurl.com/congratsDoodYouDidIt');
 	}
 	if (requestedWith != 'XMLHttpRequest') {
-		res.send(400, "bob enjoyed long walks on the beach.");
-		return;
+		return bail(req, res, "bob enjoyed long walks on the beach.");
 	}
 	if (savingKey.timestamp + 10000 < new Date().getTime()) {
-		res.send(400, "you failed! bahaha");
-		return;
+		return bail(req, res, "you failed! bahaha");
 	}
 	if (savingKey.hash != serverKey) {
-		res.send(400, 'are you trying to get your IP blocked?');
-		return;
+		return bail(req, res, 'are you trying to get your IP blocked?');
 	}
-	if (!req.session.game || !req.session.game[game]) {
-		res.send(400, "but bob was often lonely :(");
-		return;
+	if (!req.session.game || !req.session.game[currentG]) {
+		return bail(req, res, "but bob was often lonely :(");
 	}
 	if (tryHarder != crypto.createHash('sha1').update(savingKey.username + serverKey).digest("hex")) {
-		res.send(400, "keep going, you're almost there... NAHT!");
-		return;
+		return bail(req, res, "keep going, you're almost there... NAHT!");
 	}
 
 	// security
 	var extraHash = crypto.createHash('md5').update(clientKey + serverKey).digest("hex");
-	var correctHash = crypto.createHash('sha1').update(clientTime + savingKey.score + savingKey.username + clientRand + game + extraHash + clientSalt).digest("hex");
+	var correctHash = crypto.createHash('sha1').update(clientTime + savingKey.score + savingKey.username + clientRand + currentG + extraHash + clientSalt).digest("hex");
 	if (correctHash != hash) {
-		res.send(400, 'are you trying to get MAC address blocked!?!?');
-		return;
+		return bail(req, res, 'are you trying to get MAC address blocked!?!?');
 	}
 
 	// ok now it's valid, let's save it
-	var HighScore = Parse.Object.extend("HighScore");
-	var newScore = new HighScore();
+	parseHelper.recordHighScore(savingKey.score, savingKey.username, currentG, res);
 
-	newScore.set("score", savingKey.score);
-	newScore.set("username", savingKey.username);
-	newScore.set("game", game);
-
-	newScore.save(null, {
-		success: function (gameScore) {
-			res.send('saved score.');
-		},
-		error: function(gameScore, error) {
-			console.log(error);
-		  	console.log('Failed to create new object, with error code: ' + error.description);
-			res.send(500, 'failed to save score.');
-		}
-	});
-
-	// wipe away savingKey
-	req.session[clientKey] = null;
+	// clear out clientKey
+	delete req.session[clientKey];
 };
