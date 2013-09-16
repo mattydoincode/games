@@ -16,8 +16,8 @@ var GameView = Backbone.View.extend({
       cameraHeight: 5,
       cubeXSpread: 10000,
       frameRate: 50,
-      anglePerFrame: Math.PI/200,
-      maxAngle: Math.PI/20
+      anglePerFrame: Math.PI/100,
+      maxAngle: Math.PI/17
     },
 
 
@@ -121,17 +121,17 @@ var GameView = Backbone.View.extend({
       
       _.each(self.cubes, function (cube){
         cube.draw();
-      })
+      });
     },
 
     rotateCanvas: function () {
       var self = this;
       self.currentTurn = (self.currentAngle / self.settings.maxAngle) * self.settings.sideSpeed;
       if(self.left){
-        if(self.currentAngle<=self.settings.maxAngle * -1){
+        if(self.currentAngle>=self.settings.maxAngle){
           return;
         }
-        if(self.currentAngle > 0){
+        if(self.currentAngle < 0){
           self.context.translate(self.width/2, self.height/2);
           self.context.rotate(2 * self.settings.anglePerFrame);
           self.currentAngle+=2 * self.settings.anglePerFrame;
@@ -145,10 +145,10 @@ var GameView = Backbone.View.extend({
         }
       }
       else if(self.right){
-        if(self.currentAngle>=self.settings.maxAngle){
+        if(self.currentAngle<=self.settings.maxAngle * -1){
           return;
         }
-        if(self.currentAngle < 0){
+        if(self.currentAngle > 0){
           self.context.translate(self.width/2, self.height/2);
           self.context.rotate(-2 * self.settings.anglePerFrame);
           self.currentAngle+=-2 * self.settings.anglePerFrame;
@@ -162,16 +162,16 @@ var GameView = Backbone.View.extend({
         }
       }
       else {
-        if(self.currentAngle > 0 && self.currentAngle < self.settings.maxAngle){
-          self.context.translate(self.width/2, self.height/2);
-          self.context.rotate(1 * self.settings.anglePerFrame);
-          self.currentAngle+=1 * self.settings.anglePerFrame;
-          self.context.translate(-1 * self.width/2, -1 * self.height/2);
-        }
-        else if (self.currentAngle < 0 && self.currentTurn > -1 * self.settings.maxAngle) {
+        if(self.currentAngle >= self.settings.anglePerFrame){
           self.context.translate(self.width/2, self.height/2);
           self.context.rotate(-1 * self.settings.anglePerFrame);
           self.currentAngle+=-1 * self.settings.anglePerFrame;
+          self.context.translate(-1 * self.width/2, -1 * self.height/2);
+        }
+        else if (self.currentAngle <= -1 * self.settings.anglePerFrame) {
+          self.context.translate(self.width/2, self.height/2);
+          self.context.rotate(1 * self.settings.anglePerFrame);
+          self.currentAngle+=1 * self.settings.anglePerFrame;
           self.context.translate(-1 * self.width/2, -1 * self.height/2);
         }
         else {
