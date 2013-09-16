@@ -54,6 +54,7 @@
   </body>
   <script type="text/javascript" src="/javascripts/framework/jquery-2.0.3.min.js"></script>
   <script type="text/javascript" src="/javascripts/framework/underscore-min.js"></script>
+  <script type="text/javascript" src="/javascripts/framework/moment.min.js"></script>
   <script type="text/javascript" src="/javascripts/framework/backbone-min.js"></script>  
   <script type="text/javascript" src="/javascripts/framework/mustache.js"></script>
   <script type="text/javascript" src="/javascripts/framework/jquery.mustache.js"></script>

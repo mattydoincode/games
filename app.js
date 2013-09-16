@@ -7,6 +7,7 @@ var snake = require('./routes/snake');
 var cube = require('./routes/cube');
 var falldown = require('./routes/falldown');
 var highscores = require('./routes/highscores');
+var expressUglify = require('express-uglify');
 var http = require('http');
 var path = require('path');
 
@@ -24,6 +25,10 @@ app.use(express.cookieParser('your secret here'));
 app.use(express.session());
 app.use(app.router);
 app.use(require('less-middleware')({ src: __dirname + '/public' }));
+//app.use(minify());
+app.use(expressUglify.middleware({ 
+  src: __dirname + '/public'
+}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // development only

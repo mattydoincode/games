@@ -33,11 +33,15 @@ var SnakeView = Backbone.View.extend({
       self.context = self.options.context;
       self.setUpDimensions(self.options.width, self.options.height);
       self.light = true;
+      if(moment().hours()>20 || moment().hours() < 6){
+        $('#light').click();
+        self.changeColor();
+      }
       self.isDev = self.options.isDev == 'true';
       
       self.incrementViews();
       self.readScores();
-
+      self.paused = false;
       $(window).keydown(function (e) {
         self.registerInput(e.which);
       });
@@ -189,6 +193,9 @@ var SnakeView = Backbone.View.extend({
       if(self.waiting) {
         self.writeText();
       }
+      else if(self.paused){
+        self.writePauseText();
+      }
       else {
         //optional
         //self.renderGrid();
@@ -259,7 +266,17 @@ var SnakeView = Backbone.View.extend({
       var self = this;
       self.context.font="30px Arial";
       self.context.fillStyle = self.light ? self.settings.darkColor : self.settings.lightColor;
-      self.context.fillText("press space to begin",self.height /5,self.height/2 - 15);
+      self.context.fillText("press space to begin",self.width /5,self.height/2 - 15);
+      self.context.font="15px Arial";
+      self.context.fillText("use arrow keys or AWSD",self.width /5,self.height/2 + 40);
+      self.context.fillText("during game, space pauses",self.width /5,self.height/2 + 60);
+    },
+
+    writePauseText: function () {
+      var self = this;
+      self.context.font="30px Arial";
+      self.context.fillStyle = self.light ? self.settings.darkColor : self.settings.lightColor;
+      self.context.fillText("press space to continue",self.height /5,self.height/2 - 15);
     },
 
     writeScore: function() {
@@ -302,24 +319,29 @@ var SnakeView = Backbone.View.extend({
           self.startGame();
           self.waiting = false;
         }
+        else {
+          if(!self.waiting){
+            self.paused = !self.paused;
+          }
+        }
       }
 
-      if (key==37){
+      if (key==37 || key==65){
         if(self.left==0){
           self.left=1;
         }
       }
-      else if(key==38){
+      else if(key==38 || key==87){
         if(self.up==0){
           self.up=1;
         }
       }
-      else if(key==39){
+      else if(key==39 || key==68){
         if(self.right==0){
           self.right=1;
         }
       }
-      else if(key==40){
+      else if(key==40 || key==83){
         if(self.down==0){
           self.down=1;
         }
@@ -349,7 +371,7 @@ var SnakeView = Backbone.View.extend({
       }
       //2 = right
       if(self.right==1){
-        self.right=0
+        self.right=0;
         self.inputs.push(2);
       }
       //3 = down
@@ -459,7 +481,7 @@ var SnakeView = Backbone.View.extend({
       self.context.fillStyle = self.settings.spotColor;
       self.context.fillRect(self.spot.x * self.boxWidth, self.spot.y * self.boxHeight, self.boxWidth, self.boxHeight);
 
-    },
+    }
 
 
   });
