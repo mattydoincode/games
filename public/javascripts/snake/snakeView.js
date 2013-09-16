@@ -5,7 +5,7 @@ var SnakeView = Backbone.View.extend({
 
     // The DOM events specific to an item.
     events: {
-
+      "change #light": "changeColor"
     },
 
     settings: {
@@ -19,7 +19,9 @@ var SnakeView = Backbone.View.extend({
       maxInputs: 4,
       startDirection: 2, // right,
       valueOfEating: 4,
-      numScores: 5
+      numScores: 5,
+      darkColor: '#2C3E50',
+      lightColor: '#ffffff'
     },
 
     // The TodoView listens for changes to its model, re-rendering. Since there's
@@ -31,10 +33,12 @@ var SnakeView = Backbone.View.extend({
       self.context = self.options.context;
       self.width = self.options.width;
       self.height = self.options.height;
+      self.light = true;
       self.settings.gridY = Math.round(self.settings.gridX * (self.height / self.width));
       self.boxHeight = self.height / self.settings.gridY;
       self.boxWidth = self.width / self.settings.gridX;
       
+      self.incrementTracking();
       self.readScores();
 
       $(window).keydown(function (e) {
@@ -51,6 +55,30 @@ var SnakeView = Backbone.View.extend({
       */
       self.waiting = true;
       self.render();
+    },
+
+    changeColor: function() {
+      var self = this;
+      self.light = !self.light;
+
+      if (self.light) {
+        $('.canvasContainer').css('background', self.settings.lightColor);
+      } else {
+        $('.canvasContainer').css('background', self.settings.darkColor);
+      }
+    },
+
+    incrementTracking: function() {
+      var Tracking = Parse.Object.extend("Tracking");
+      var query = new Parse.Query(Tracking);
+      query.get("JBkMU5Uhqm", {
+        success: function(tracking) {
+          tracking.increment("views");
+          tracking.save();
+        },
+        error: function(object, error) {
+        }
+      });
     },
 
     readScores: function() {
@@ -184,14 +212,14 @@ var SnakeView = Backbone.View.extend({
     writeText: function () {
       var self = this;
       self.context.font="30px Arial";
-      self.context.fillStyle = "Black";
+      self.context.fillStyle = self.light ? self.settings.darkColor : self.settings.lightColor;
       self.context.fillText("press space to begin",self.height /5,self.height/2 - 15);
     },
 
     writeScore: function() {
       var self = this;
       self.context.font="30px Arial";
-      self.context.fillStyle = "Black";
+      self.context.fillStyle = self.light ? self.settings.darkColor : self.settings.lightColor;
       self.context.fillText(self.score, 10, 40);
     },
 

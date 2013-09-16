@@ -24,7 +24,10 @@
     <div class="canvasContainer">
       <canvas id="canvas"></canvas>
     </div>
-    <div class="container-fluid">
+    <div class="container-fluid snake-wrapper">
+      <div class="switch" data-on-label="LITE" data-off-label="DRK">
+        <input type="checkbox" id="light" checked="" />
+      </div>
       <div class="row-fluid" style="padding-top:30px;">
         <div class="well highscores">
           <h3>High Scores</h3>
@@ -55,6 +58,7 @@
   <script type="text/javascript" src="/javascripts/framework/mustache.js"></script>
   <script type="text/javascript" src="/javascripts/framework/jquery.mustache.js"></script>
   <script type="text/javascript" src="/javascripts/framework/parse-1.2.12.min.js"></script>
+  <script type="text/javascript" src="/js/bootstrap-switch.js"></script>
   <script type="text/javascript" src="/javascripts/snake/canvasView.js"></script>
   <script type="text/javascript" src="/javascripts/snake/snakeView.js"></script>
   <script type="text/javascript">
