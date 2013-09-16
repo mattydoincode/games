@@ -21,7 +21,7 @@ var SnakeView = Backbone.View.extend({
       valueOfEating: 4,
       numScores: 5,
       darkColor: '#2C3E50',
-      lightColor: '#ffffff'
+      lightColor: '#FFFFFF'
     },
 
     // The TodoView listens for changes to its model, re-rendering. Since there's
@@ -31,19 +31,16 @@ var SnakeView = Backbone.View.extend({
       var self = this;
       _.bindAll(self, 'render', 'renderGrid', 'renderSnake');
       self.context = self.options.context;
-      self.width = self.options.width;
-      self.height = self.options.height;
+      self.setUpDimensions(self.options.width, self.options.height);
       self.light = true;
-      self.settings.gridY = Math.round(self.settings.gridX * (self.height / self.width));
-      self.boxHeight = self.height / self.settings.gridY;
-      self.boxWidth = self.width / self.settings.gridX;
-      
       self.incrementTracking();
       self.readScores();
 
       $(window).keydown(function (e) {
         self.registerInput(e.which);
       });
+
+
 
       //REFERENCE
       /*
@@ -55,6 +52,15 @@ var SnakeView = Backbone.View.extend({
       */
       self.waiting = true;
       self.render();
+    },
+
+    setUpDimensions: function (width, height) {
+      var self = this;
+      self.width = width;
+      self.height = height;
+      self.settings.gridY = Math.round(self.settings.gridX * (self.height / self.width));
+      self.boxHeight = self.height / self.settings.gridY;
+      self.boxWidth = self.width / self.settings.gridX;
     },
 
     changeColor: function() {

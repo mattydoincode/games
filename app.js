@@ -2,6 +2,7 @@
 var express = require('express');
 var pac = require('./routes/pacxon');
 var snake = require('./routes/snake');
+var cube = require('./routes/cube');
 var http = require('http');
 var path = require('path');
 
@@ -31,6 +32,7 @@ app.get('/', function (req, res) {
 });
 app.get('/pacxon', pac.pacxon);
 app.get('/snake', snake.index);
+app.get('/cuberunner', cube.index);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

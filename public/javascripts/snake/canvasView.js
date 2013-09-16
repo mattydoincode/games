@@ -14,14 +14,25 @@ var CanvasView = Backbone.View.extend({
       var self = this;
       _.bindAll(self, 'setUpDimensions');
       self.canvas = document.getElementById("canvas");
-      $(self.canvas).css('background-color', "black");
       self.context = self.canvas.getContext("2d");
       var w = $(window);
       var height = w.innerHeight();
       var width = w.innerWidth();
       self.setUpDimensions(width,height);
       self.snake = new SnakeView({context: self.context, width: width, height: height, el: $('.snake-wrapper')});
+
+      $(window).resize(function () {
+        if(self.snake.waiting){
+          var w = $(window);
+          var h = w.innerHeight();
+          var ww = w.innerWidth();
+          self.setUpDimensions(ww,h);
+          self.snake.setUpDimensions(ww,h);
+        }
+      });
     },
+
+
 
     // Re-render the titles of the todo item.
     setUpDimensions: function(width, height) {
