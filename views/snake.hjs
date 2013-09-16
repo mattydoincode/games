@@ -28,7 +28,7 @@
       <div class="switch" data-on-label="LITE" data-off-label="DRK">
         <input type="checkbox" id="light" checked="" />
       </div>
-      <div class="row-fluid" style="padding-top:30px;">
+      <div class="row-fluid">
         <div class="well highscores">
           <h3>High Scores</h3>
           <div id="daScores">
