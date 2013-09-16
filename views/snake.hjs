@@ -61,7 +61,7 @@
   <script type="text/javascript" src="/javascripts/framework/jquery-ui.min.js"></script>
   <script type="text/javascript" src="/javascripts/framework/bootstrap-switch.js"></script>
   <script type="text/javascript" src="/javascripts/snake/canvasView.js"></script>
-  <script type="text/javascript" src="/javascripts/snake/snakeView2.js"></script>
+  <script type="text/javascript" src="/javascripts/snake/snakeView3.js"></script>
   <script type="text/javascript">
     $(function () {
       $.Mustache.addFromDom();
