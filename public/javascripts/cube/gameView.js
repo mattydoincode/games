@@ -12,10 +12,12 @@ var GameView = Backbone.View.extend({
     settings: {
       newCubesPerFrame: 2,
       forwardSpeed: 200,
-      sideSpeed: 35,
+      sideSpeed: 45,
       cameraHeight: 5,
       cubeXSpread: 10000,
-      frameRate: 50
+      frameRate: 50,
+      anglePerFrame: Math.PI/200,
+      maxAngle: Math.PI/20
     },
 
 
@@ -60,7 +62,10 @@ var GameView = Backbone.View.extend({
       var self = this;
 
       self.addNewCubes();
+      self.context.clearRect(-self.width,-self.height, self.width*3, self.height*3);
+      self.rotateCanvas();
       self.moveCubes();
+      self.drawHorizon();
       self.drawCubes();
 
       setTimeout(function () {
@@ -74,6 +79,8 @@ var GameView = Backbone.View.extend({
       self.render();
       self.right = false;
       self.left = false;
+      self.currentAngle = 0;
+      self.currentTurn = 0;
     },
 
     addNewCubes: function () {
@@ -88,21 +95,9 @@ var GameView = Backbone.View.extend({
     moveCubes: function () {
       var self = this;
       
-      if(self.left){
-        _.each(self.cubes, function (cube) {
-          cube.move(-1 * self.settings.sideSpeed, self.settings.forwardSpeed);
-        });
-      }
-      else if(self.right){
-        _.each(self.cubes, function (cube) {
-          cube.move(self.settings.sideSpeed, self.settings.forwardSpeed);
-        });
-      }
-      else {
-        _.each(self.cubes, function (cube) {
-          cube.move(0, self.settings.forwardSpeed);
-        });
-      }
+      _.each(self.cubes, function (cube) {
+        cube.move(self.currentTurn, self.settings.forwardSpeed);
+      });
 
       for(var i = 0; i < self.cubes.length; i++){
         if(self.cubes[i].frontSquare[0].y > 12000){
@@ -113,12 +108,81 @@ var GameView = Backbone.View.extend({
 
     },
 
+    drawHorizon: function () {
+      var self = this;
+      self.context.fillStyle="#ddd";
+      self.context.fillRect(-1 * self.width/2,-1 * self.height/2, self.width*2, self.height);
+      self.context.fillStyle="#666";
+      self.context.fillRect(-1 * self.width/2,self.height/2, self.width * 2, self.height);
+    },
+
     drawCubes: function () {
       var self = this;
-      self.context.clearRect(0,0, self.width , self.height);
+      
       _.each(self.cubes, function (cube){
         cube.draw();
       })
+    },
+
+    rotateCanvas: function () {
+      var self = this;
+      self.currentTurn = (self.currentAngle / self.settings.maxAngle) * self.settings.sideSpeed;
+      if(self.left){
+        if(self.currentAngle<=self.settings.maxAngle * -1){
+          return;
+        }
+        if(self.currentAngle > 0){
+          self.context.translate(self.width/2, self.height/2);
+          self.context.rotate(2 * self.settings.anglePerFrame);
+          self.currentAngle+=2 * self.settings.anglePerFrame;
+          self.context.translate(-1 * self.width/2, -1 * self.height/2);
+        }
+        else {
+          self.context.translate(self.width/2, self.height/2);
+          self.context.rotate(1 * self.settings.anglePerFrame);
+          self.currentAngle+=1 * self.settings.anglePerFrame;
+          self.context.translate(-1 * self.width/2, -1 * self.height/2);
+        }
+      }
+      else if(self.right){
+        if(self.currentAngle>=self.settings.maxAngle){
+          return;
+        }
+        if(self.currentAngle < 0){
+          self.context.translate(self.width/2, self.height/2);
+          self.context.rotate(-2 * self.settings.anglePerFrame);
+          self.currentAngle+=-2 * self.settings.anglePerFrame;
+          self.context.translate(-1 * self.width/2, -1 * self.height/2);
+        }
+        else {
+          self.context.translate(self.width/2, self.height/2);
+          self.context.rotate(-1 * self.settings.anglePerFrame);
+          self.currentAngle+=-1 * self.settings.anglePerFrame;
+          self.context.translate(-1 * self.width/2, -1 * self.height/2);
+        }
+      }
+      else {
+        if(self.currentAngle > 0 && self.currentAngle < self.settings.maxAngle){
+          self.context.translate(self.width/2, self.height/2);
+          self.context.rotate(1 * self.settings.anglePerFrame);
+          self.currentAngle+=1 * self.settings.anglePerFrame;
+          self.context.translate(-1 * self.width/2, -1 * self.height/2);
+        }
+        else if (self.currentAngle < 0 && self.currentTurn > -1 * self.settings.maxAngle) {
+          self.context.translate(self.width/2, self.height/2);
+          self.context.rotate(-1 * self.settings.anglePerFrame);
+          self.currentAngle+=-1 * self.settings.anglePerFrame;
+          self.context.translate(-1 * self.width/2, -1 * self.height/2);
+        }
+        else {
+          if(self.currentAngle!=0){
+            self.context.translate(self.width/2, self.height/2);
+            self.context.rotate(self.currentAngle * -1);
+            self.currentAngle=0;
+            self.context.translate(-1 * self.width/2, -1 * self.height/2);
+          }
+        }
+      }
     },
 
     // Re-render the titles of the todo item.

@@ -41,7 +41,6 @@ var CanvasView = Backbone.View.extend({
       self.canvas.height = height;
       $(self.canvas).height(height);
       $(self.canvas).width(width);
-
       physics.cameraX = width/2;
       physics.cameraZ = height/2;
       physics.canvasHeight= height;
