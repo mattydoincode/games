@@ -304,22 +304,22 @@ var SnakeView = Backbone.View.extend({
         }
       }
 
-      if (key==37){
+      if (key==37 || key==65){
         if(self.left==0){
           self.left=1;
         }
       }
-      else if(key==38){
+      else if(key==38 || key==87){
         if(self.up==0){
           self.up=1;
         }
       }
-      else if(key==39){
+      else if(key==39 || key==68){
         if(self.right==0){
           self.right=1;
         }
       }
-      else if(key==40){
+      else if(key==40 || key==83){
         if(self.down==0){
           self.down=1;
         }
