@@ -7,7 +7,7 @@
   overflow: visible;
 }
 
-.snake-wrapper {
+.game-wrapper {
 	position: fixed;
 	right: 250px;
 	top: 20px;

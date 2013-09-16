@@ -33,6 +33,7 @@ var SnakeView = Backbone.View.extend({
       self.context = self.options.context;
       self.setUpDimensions(self.options.width, self.options.height);
       self.light = true;
+      self.isDev = self.options.isDev == 'true';
       
       self.incrementView();
       self.readScores();
@@ -76,9 +77,13 @@ var SnakeView = Backbone.View.extend({
     },
 
     incrementView: function() {
+      var self = this;
+      if (self.isDev) {
+        return;
+      }
       if (self.tracking) {
-        tracking.increment("views");
-        tracking.save();
+        self.tracking.increment("views");
+        self.tracking.save();
       } else {
         var Tracking = Parse.Object.extend("Tracking");
         var query = new Parse.Query(Tracking);
@@ -96,9 +101,13 @@ var SnakeView = Backbone.View.extend({
     },
 
     incrementGame: function() {
+      var self = this;
+      if (self.isDev) {
+        return;
+      }
       if (self.tracking) {
-        tracking.increment("games");
-        tracking.save();
+        self.tracking.increment("games");
+        self.tracking.save();
       } else {
         var Tracking = Parse.Object.extend("Tracking");
         var query = new Parse.Query(Tracking);
@@ -121,6 +130,7 @@ var SnakeView = Backbone.View.extend({
       var query = new Parse.Query(HighScore);
       query.limit(self.settings.numScores);
       query.descending("score");
+      query.equalTo("game", "snake");
       query.find({
         success: function(results) {
           self.scores = results;
