@@ -62,7 +62,7 @@ var CubeView = Backbone.View.extend({
       self.context.moveTo(first.x, first.z);
       _.each(self.transformFront, function (point) {
         self.context.lineTo(point.x, point.z);
-      })
+      });
       self.context.stroke();
 
       self.context.beginPath();
@@ -70,7 +70,7 @@ var CubeView = Backbone.View.extend({
       self.context.moveTo(first.x, first.z);
       _.each(self.transformBack, function (point) {
         self.context.lineTo(point.x, point.z);
-      })
+      });
       self.context.stroke();
 
       for(var i = 0; i < 4; i++){
