@@ -37,7 +37,7 @@ var SnakeView = Backbone.View.extend({
       
       self.incrementViews();
       self.readScores();
-
+      self.paused = false;
       $(window).keydown(function (e) {
         self.registerInput(e.which);
       });
@@ -189,6 +189,9 @@ var SnakeView = Backbone.View.extend({
       if(self.waiting) {
         self.writeText();
       }
+      else if(self.paused){
+        self.writePauseText();
+      }
       else {
         //optional
         //self.renderGrid();
@@ -259,7 +262,17 @@ var SnakeView = Backbone.View.extend({
       var self = this;
       self.context.font="30px Arial";
       self.context.fillStyle = self.light ? self.settings.darkColor : self.settings.lightColor;
-      self.context.fillText("press space to begin",self.height /5,self.height/2 - 15);
+      self.context.fillText("press space to begin",self.width /5,self.height/2 - 15);
+      self.context.font="15px Arial";
+      self.context.fillText("use arrow keys or AWSD",self.width /5,self.height/2 + 40);
+      self.context.fillText("during game, space pauses",self.width /5,self.height/2 + 60);
+    },
+
+    writePauseText: function () {
+      var self = this;
+      self.context.font="30px Arial";
+      self.context.fillStyle = self.light ? self.settings.darkColor : self.settings.lightColor;
+      self.context.fillText("press space to continue",self.height /5,self.height/2 - 15);
     },
 
     writeScore: function() {
@@ -301,6 +314,11 @@ var SnakeView = Backbone.View.extend({
         if(self.waiting && !$('#username').is(':focus')){
           self.startGame();
           self.waiting = false;
+        }
+        else {
+          if(!self.waiting){
+            self.paused = !self.paused;
+          }
         }
       }
 
