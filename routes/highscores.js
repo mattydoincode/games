@@ -1,9 +1,10 @@
 var bcrypt = require('bcryptjs');
 var crypto = require('crypto');
 var Parse = require('parse').Parse;
-var keys = require('../keys').KEYS;
 
-Parse.initialize("SEHipMlc4GV6rEPmxZK5OMwk9zkJGRBp6XWIapGD", keys.PARSE);
+var priateKey = process.env.HIGH_SCORE || require('../keys').HIGH_SCORE;
+
+Parse.initialize("SEHipMlc4GV6rEPmxZK5OMwk9zkJGRBp6XWIapGD", 'NhHEM0pmBzx3e5gYUgimgSfj49SLX3iB48TthPm1');
 
 var validKeys = {};
 
@@ -22,7 +23,6 @@ exports.getSavingKey = function(req, res) {
 		return;
 	}
 
-	var privateKey = keys.HIGH_SCORE;
 	var timestamp = new Date().getTime();
 	var random = Math.floor((Math.random()*1000)+1);;
 	var salt = bcrypt.genSaltSync();
