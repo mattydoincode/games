@@ -14,6 +14,7 @@ var CanvasView = Backbone.View.extend({
       var self = this;
       _.bindAll(self, 'setUpDimensions');
       self.canvas = document.getElementById("canvas");
+      $(self.canvas).css('background-color', "black");
       self.context = self.canvas.getContext("2d");
       var w = $(window);
       var height = w.innerHeight();
