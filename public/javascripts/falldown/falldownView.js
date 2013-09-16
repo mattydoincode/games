@@ -240,9 +240,9 @@ var FalldownView = Backbone.View.extend({
             success: function () {
               self.readScores();
             }
-          })
+          });
         }
-      })
+      });
 
       $('#newscore').html('');
       $('.newscore-row').hide();
@@ -362,7 +362,7 @@ var FalldownView = Backbone.View.extend({
       }
       //2 = right
       if(self.right==1){
-        self.right=0
+        self.right=0;
         self.inputs.push(2);
       }
       //3 = down
@@ -467,12 +467,12 @@ var FalldownView = Backbone.View.extend({
         else{
           self.context.fillRect(spot.x * self.boxWidth, spot.y * self.boxHeight, self.boxWidth, self.boxHeight);
         }
-      };
+      }
 
       self.context.fillStyle = self.settings.spotColor;
       self.context.fillRect(self.spot.x * self.boxWidth, self.spot.y * self.boxHeight, self.boxWidth, self.boxHeight);
 
-    },
+    }
 
 
   });
