@@ -19,7 +19,7 @@ var CanvasView = Backbone.View.extend({
       var height = w.innerHeight();
       var width = w.innerWidth();
       self.setUpDimensions(width,height);
-      self.falldown = new FalldownView({context: self.context, width: width, height: height, el: $('.game-wrapper'), isDev: self.options.isDev });
+      self.falldown = new FalldownView({context: self.context, width: width, height: height});
 
       $(window).resize(function () {
         if(self.falldown.waiting){

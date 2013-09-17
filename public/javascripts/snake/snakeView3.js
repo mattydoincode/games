@@ -37,9 +37,7 @@ var SnakeView = Backbone.View.extend({
         $('#light').click();
         self.changeColor();
       }
-      self.isDev = self.options.isDev == 'true';
       
-      self.incrementViews();
       self.readScores();
       self.paused = false;
       $(window).keydown(function (e) {
@@ -77,54 +75,6 @@ var SnakeView = Backbone.View.extend({
         $('.canvasContainer').css('background', self.settings.lightColor);
       } else {
         $('.canvasContainer').css('background', self.settings.darkColor);
-      }
-    },
-
-    incrementViews: function() {
-      var self = this;
-      if (self.isDev) {
-        return;
-      }
-      if (self.tracking) {
-        self.tracking.increment("views");
-        self.tracking.save();
-      } else {
-        var Tracking = Parse.Object.extend("Tracking");
-        var query = new Parse.Query(Tracking);
-        query.get("JBkMU5Uhqm", {
-          success: function(tracking) {
-            self.tracking = tracking;
-            tracking.increment("views");
-            tracking.save();
-          },
-          error: function(object, error) {
-            self.tracking = null;
-          }
-        });
-      }
-    },
-
-    incrementPlays: function() {
-      var self = this;
-      if (self.isDev) {
-        return;
-      }
-      if (self.tracking) {
-        self.tracking.increment("plays");
-        self.tracking.save();
-      } else {
-        var Tracking = Parse.Object.extend("Tracking");
-        var query = new Parse.Query(Tracking);
-        query.get("JBkMU5Uhqm", {
-          success: function(tracking) {
-            self.tracking = tracking;
-            tracking.increment("plays");
-            tracking.save();
-          },
-          error: function(object, error) {
-            self.tracking = null;
-          }
-        });
       }
     },
 
@@ -180,13 +130,11 @@ var SnakeView = Backbone.View.extend({
       self.direction = self.settings.startDirection;
       $('.container-fluid').hide();
 
-      // TODO increment plays from node
-      self.incrementPlays();
       self.c = Math.floor((Math.random()*1000)+1) + new Date().getTime();
       $.ajax({
         type: 'GET',
         url: '/highscores',
-        data: { c: self.c },
+        data: { c: self.c, q: 'snake' },
         success: function (tmpKey) {
           self.tmpKey = tmpKey;
         }
@@ -229,8 +177,8 @@ var SnakeView = Backbone.View.extend({
       $.ajax({
         type: 'PUT',
         url: '/highscores',
-        data: { k: self.tmpKey, q: 'snake' },
-        headers: { 'X-Here-We-Go': username, 'X-Lets-Do-It': score },
+        data: { k: self.tmpKey },
+        headers: { 'X-Here-We-Go': username, 'X-Lets-Do-It': (self.c%2==0?score+7:score+9) },
         success: function (savingKey) {
           var x = crypto.hex_md5(self.c + savingKey);
           var l = crypto.hex_sha1(username + savingKey);

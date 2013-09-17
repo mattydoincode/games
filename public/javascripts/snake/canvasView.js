@@ -19,7 +19,7 @@ var CanvasView = Backbone.View.extend({
       var height = w.innerHeight();
       var width = w.innerWidth();
       self.setUpDimensions(width,height);
-      self.snake = new SnakeView({context: self.context, width: width, height: height, el: $('.game-wrapper'), isDev: self.options.isDev});
+      self.snake = new SnakeView({context: self.context, width: width, height: height, el: $('.game-wrapper')});
 
       $(window).resize(function () {
         if(self.snake.waiting){
