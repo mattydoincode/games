@@ -2,7 +2,7 @@ var CubeView = Backbone.View.extend({
 
 
     dimensions: {
-      radius: 100
+      radius: 200
     },
     // The TodoView listens for changes to its model, re-rendering. Since there's
     // a one-to-one correspondence between a **Todo** and a **TodoView** in this
@@ -13,6 +13,12 @@ var CubeView = Backbone.View.extend({
       self.center = self.options.center;
       self.context = self.options.context;
       self.setUpPoints();
+      self.style = {
+        r: Math.floor(Math.random() * 256),
+        g: Math.floor(Math.random() * 256),
+        b: Math.floor(Math.random() * 256),
+        a: .5,
+      }
     },
 
 
@@ -56,13 +62,15 @@ var CubeView = Backbone.View.extend({
         self.transformBack.push(physics.transform(point.x,point.y,point.z));
       });
 
-
+      self.context.fillStyle = "rgba(" +self.style.r + "," + self.style.g + "," + self.style.b + "," + self.style.a + ")";
       self.context.beginPath();
       var first = self.transformFront[3];
       self.context.moveTo(first.x, first.z);
       _.each(self.transformFront, function (point) {
         self.context.lineTo(point.x, point.z);
       });
+      self.context.closePath();
+      self.context.fill();
       self.context.stroke();
 
       self.context.beginPath();

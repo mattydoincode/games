@@ -31,7 +31,7 @@ app.use(express.cookieParser('your secret here12345431'));
 app.use(express.session({secret: 'your secret here12345431'}));
 app.use(app.router);
 app.use(require('less-middleware')({ src: __dirname + '/public' }));
-app.use(require('express-uglify').middleware({ src: __dirname + '/public' }));
+//app.use(require('express-uglify').middleware({ src: __dirname + '/public' }));
 app.use(express.static(__dirname + '/public'));
 
 app.configure('development', function(){

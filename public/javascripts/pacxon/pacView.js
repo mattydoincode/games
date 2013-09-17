@@ -20,7 +20,9 @@ var PacView = Backbone.View.extend({
       rate: 80,
       maxInputs: 1000,
       startDirection: 2, // right,
-      valueOfEating: 4
+      valueOfEating: 4,
+      numEnemies: 1
+
     },
 
 
@@ -30,7 +32,7 @@ var PacView = Backbone.View.extend({
     // app, we set a direct reference on the model for convenience.
     initialize: function() {
       var self = this;
-      _.bindAll(self, 'render', 'renderGrid', 'renderSnake');
+      _.bindAll(self, 'render', 'fillSpace', 'registerPath', 'renderGrid', 'renderSnake');
       self.context = self.options.context;
       self.width = self.options.width;
       self.height = self.options.height;
@@ -59,6 +61,7 @@ var PacView = Backbone.View.extend({
     startGame: function () {
       var self = this;
       self.snakeQueue = [];
+      self.setUpEnemies();
       self.initializeGameGrid();
       self.snakeQueue.push({x: 0, y: 0});
       self.inputQueue = [];
@@ -73,7 +76,21 @@ var PacView = Backbone.View.extend({
       self.left = 0;
       self.right = 0;
 
+
       self.direction = self.settings.startDirection;
+    },
+
+    setUpEnemies: function () {
+      var self = this;
+      self.enemies = [];
+      for(var i = 0; i < self.settings.numEnemies; i++){
+        self.enemies.push(new EnemyView({
+          spot: {
+            x:physics.getRandomInt(1,self.settings.gridX-2),
+            y:physics.getRandomInt(1,self.settings.gridY-2)
+          }
+        }));
+      }
     },
 
     initializeGameGrid: function () {
@@ -122,12 +139,16 @@ var PacView = Backbone.View.extend({
         //optional
         self.renderGrid();
         self.checkInputs();
+        _.each(self.enemies, function (guy){
+          guy.move();
+        });
         if(self.autoMove){
           self.autoMoveSnake();
         }
         else{
           self.stepMoveSnake();
         }
+        self.drawEnemies();
         self.renderSnake();
       }
 
@@ -144,6 +165,14 @@ var PacView = Backbone.View.extend({
     clearCanvas: function () {
       var self = this;
       self.context.clearRect(0,0, self.width , self.height);
+    },
+
+    drawEnemies: function () {
+      var self = this;
+       self.context.fillStyle = "red";
+       _.each(self.enemies, function (guy){
+          self.context.fillRect(guy.spot.x * self.boxWidth, guy.spot.y * self.boxHeight, self.boxWidth, self.boxHeight);
+        });
     },
 
     registerInput: function (key) {
@@ -344,11 +373,24 @@ var PacView = Backbone.View.extend({
     },
 
     fillSpace: function () {
-
-
-
-
-
+      var self = this;
+      var grid = self.gameGrid;
+      _.each(self.enemies, function (badguy){
+        var clearSpots = badguy.fillAlgorithm(grid);
+        _.each(clearSpots, function (spot){
+          grid[spot.x][spot.y].status = "keepblank";
+        });
+      });
+      for(var i = 0; i < self.settings.gridX; i++) {
+        for(var j = 0; j < self.settings.gridY; j++) {
+          if(grid[i][j].status=="blank"){
+            grid[i][j].status = "cleared";
+          }
+          else if(grid[i][j].status=="keepblank"){
+            grid[i][j].status="blank";
+          }
+        }
+      }
     },
 
     renderGrid: function () {

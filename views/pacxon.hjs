@@ -17,8 +17,9 @@
     <script type="text/javascript" src="/javascripts/framework/underscore-min.js"></script>
     <script src="/javascripts/framework/backbone-min.js"></script>
     
-    <script type="text/javascript" src="/javascripts/framework/mustache.js"></script>
+    <script type="text/javascript" src="/javascripts/pacxon/physics.js"></script>
     <script type="text/javascript" src="/javascripts/pacxon/canvasView.js"></script>
+    <script type="text/javascript" src="/javascripts/pacxon/enemyView.js"></script>
     <script type="text/javascript" src="/javascripts/pacxon/pacView.js"></script>
 
 

@@ -10,14 +10,16 @@ var GameView = Backbone.View.extend({
     },
 
     settings: {
-      newCubesPerFrame: 2,
-      forwardSpeed: 200,
-      sideSpeed: 45,
+      newCubesPerFrame: 1,
+      forwardSpeed: 500,
+      sideSpeed: 105,
       cameraHeight: 5,
-      cubeXSpread: 10000,
+      speedIncrease: 1,
+      cubeXSpread: 5000,
       frameRate: 50,
       anglePerFrame: Math.PI/100,
-      maxAngle: Math.PI/17
+      maxAngle: Math.PI/17,
+      horizonDropPercentage: 0
     },
 
 
@@ -65,6 +67,7 @@ var GameView = Backbone.View.extend({
       self.context.clearRect(-self.width,-self.height, self.width*3, self.height*3);
       self.rotateCanvas();
       self.moveCubes();
+      self.increaseSpeed();
       self.drawHorizon();
       self.drawCubes();
 
@@ -87,11 +90,16 @@ var GameView = Backbone.View.extend({
       var self = this;
       for(var i = 0; i < self.settings.newCubesPerFrame; i++){
         var x = (Math.random()*self.settings.cubeXSpread * 2)-self.settings.cubeXSpread;
-        var cube = new CubeView({center: {x: x, y: 0, z: 0}, context: self.context});
+        var cube = new CubeView({center: {x: x, y: -60000, z: 100}, context: self.context});
         self.cubes.push(cube);
       }
     },
 
+
+    increaseSpeed: function () {
+      var self = this;
+      self.settings.forwardSpeed+=self.settings.speedIncrease;
+    },
     moveCubes: function () {
       var self = this;
       
@@ -111,17 +119,17 @@ var GameView = Backbone.View.extend({
     drawHorizon: function () {
       var self = this;
       self.context.fillStyle="#ddd";
-      self.context.fillRect(-1 * self.width/2,-1 * self.height/2, self.width*2, self.height);
+      self.context.fillRect(-1 * self.width/2,-1 * self.height/2, self.width*2, self.height + self.height*self.settings.horizonDropPercentage);
       self.context.fillStyle="#666";
-      self.context.fillRect(-1 * self.width/2,self.height/2, self.width * 2, self.height);
+      self.context.fillRect(-1 * self.width/2,self.height/2 + self.height*self.settings.horizonDropPercentage, self.width * 2, self.height);
     },
 
     drawCubes: function () {
       var self = this;
-      
-      _.each(self.cubes, function (cube){
-        cube.draw();
-      });
+      //draw them front to back
+      for(var i = self.cubes.length-1; i >= 0; i--){
+        self.cubes[i].draw();
+      }
     },
 
     rotateCanvas: function () {
