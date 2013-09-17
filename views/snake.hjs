@@ -8,16 +8,13 @@
 
     <meta name="description" content="Fullscreen, classic, no-nonsense, snake arcade game. Built by Emdaq.">
     <meta name="keywords" content="snake,snakegame,games">
-
     <meta property="og:url" content="http://games.emdaq.com/snake">
     <meta property="og:image" content="http://games.emdaq.com/images/facebookpic.png">
     <meta property="og:description" content="Fullscreen, classic, no-nonsense, snake arcade game. Built by Emdaq.">
     <meta property="og:title" content="Emdaq Games - {{title}}">
     <meta property="og:site_name" content="Emdaq Games - {{title}}">
-
     <meta itemprop="name" content="Emdaq Games - {{title}}">
     <meta itemprop="description" content="Fullscreen, classic, no-nonsense, snake arcade game. Built by Emdaq.">
-
   </head>
   <body>
     <div class="canvasContainer">

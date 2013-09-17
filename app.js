@@ -11,6 +11,7 @@ process.env.PORT = process.env.PORT || 3000;
 
 require('parse').Parse.initialize("SEHipMlc4GV6rEPmxZK5OMwk9zkJGRBp6XWIapGD", 'NhHEM0pmBzx3e5gYUgimgSfj49SLX3iB48TthPm1');
 var express = require('express');
+var index = require('./routes/index');
 var pac = require('./routes/pacxon');
 var snake = require('./routes/snake');
 var cube = require('./routes/cube');
@@ -32,7 +33,6 @@ app.use(express.cookieParser('your secret here12345431'));
 app.use(express.session({secret: 'your secret here12345431'}));
 app.use(app.router);
 app.use(require('less-middleware')({ src: __dirname + '/public' }));
-//app.use(require('express-uglify').middleware({ src: __dirname + '/public' }));
 app.use(express.static(__dirname + '/public'));
 
 app.configure('development', function(){
@@ -41,17 +41,14 @@ app.configure('development', function(){
 
 app.configure('production', function(){
     app.use(express.errorHandler());
+	app.use(require('express-uglify').middleware({ src: __dirname + '/public' }));
 });
 
 // **************************
 // ******** ROUTING *********
 // **************************
 
-// no home page yet, redirect to snake
-app.get('/', function (req, res) {
-	res.redirect("/snake");
-});
-
+app.get('/', index.index);
 app.get('/pacxon', pac.pacxon);
 app.get('/snake', snake.index);
 app.get('/falldown', falldown.index);

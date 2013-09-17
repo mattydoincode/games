@@ -21,7 +21,7 @@ var PacView = Backbone.View.extend({
       maxInputs: 1000,
       startDirection: 2, // right,
       valueOfEating: 4,
-      numEnemies: 1
+      numEnemies: 3
 
     },
 
